@@ -13,6 +13,14 @@ type url struct {
     params map[string][]string
 }
 
+func trimParamKey(paramKey string) string {
+    if strings.HasSuffix(paramKey, "[]") {
+        paramKey = paramKey[:len(paramKey)-len("[]")]
+    }
+
+    return paramKey
+}
+
 func parseURL(urlString string) url {
     u := url{}
     re := regexp.MustCompile(`^(?P<protocol>[a-z,0-9]+)?(?:://)?(?P<host>[\.,a-z,0-9]+)?(?P<path>[^\?]+)`)
@@ -38,14 +46,15 @@ func parseURL(urlString string) url {
 
     for _, query := range queries {
         parts, queryValue := strings.Split(query, "="), ""
+        key := trimParamKey(parts[0])
         if len(parts) > 1 {
             queryValue = parts[1]
         }
 
-        if _, ok := u.params[parts[0]]; ok {
-            u.params[parts[0]] = append(u.params[parts[0]], queryValue)
+        if _, ok := u.params[key]; ok {
+            u.params[key] = append(u.params[key], queryValue)
         } else {
-            u.params[parts[0]] = []string{queryValue}
+            u.params[key] = []string{queryValue}
         }
     }
 
@@ -55,4 +64,5 @@ func parseURL(urlString string) url {
 func main() {
 	fmt.Println(parseURL("http://apple.com/search?term=ipad"))
 	fmt.Println(parseURL("https://facebook.com/create/user?firstName=john&lastName=doe&city=venice"))
+    fmt.Println(parseURL("https://geerydev.com/hello?names[]=tyler&names[]=joe&names[]=tradesy"))
 }
