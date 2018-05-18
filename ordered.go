@@ -30,7 +30,7 @@ func orderedAndIntervaled(ints []int) bool {
 			continue
 		}
 
-        if i < last || i - last != interval {
+        if i - last != interval {
 			return false
 		}
 
