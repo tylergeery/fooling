@@ -13,6 +13,10 @@ type url struct {
     params map[string][]string
 }
 
+func (u url) output() {
+    fmt.Printf("protocol: %v\nhost: %v\npath: %v\nparams: %v\n", u.protocol, u.host, u.path, u.params)
+}
+
 func trimParamKey(paramKey string) string {
     if strings.HasSuffix(paramKey, "[]") {
         paramKey = paramKey[:len(paramKey)-len("[]")]
@@ -62,7 +66,16 @@ func parseURL(urlString string) url {
 }
 
 func main() {
-	fmt.Println(parseURL("http://apple.com/search?term=ipad"))
-	fmt.Println(parseURL("https://facebook.com/create/user?firstName=john&lastName=doe&city=venice"))
-    fmt.Println(parseURL("https://geerydev.com/hello?names[]=tyler&names[]=joe&names[]=tradesy"))
+    urls := []string{
+        "http://apple.com/search?term=ipad",
+        "https://facebook.com/create/user?firstName=john&lastName=doe&city=venice",
+        "https://geerydev.com/hello?names[]=tyler&names[]=joe&names[]=tradesy",
+        "/hello?names[]=tyler&names[]=joe&company=tradesy",
+    }
+
+    for _, u := range urls {
+        fmt.Println(u)
+        parseURL(u).output()
+        fmt.Println("")
+    }
 }
