@@ -6,15 +6,15 @@ import (
     "strings"
 )
 
-type url struct {
+type Url struct {
     protocol string
     host string
     path string
     params map[string][]string
 }
 
-func (u url) output() {
-    fmt.Printf("protocol: %v\nhost: %v\npath: %v\nparams: %v\n", u.protocol, u.host, u.path, u.params)
+func (u Url) Output() string {
+    return fmt.Sprintf("protocol: %v\nhost: %v\npath: %v\nparams: %v\n", u.protocol, u.host, u.path, u.params)
 }
 
 func trimParamKey(paramKey string) string {
@@ -25,8 +25,8 @@ func trimParamKey(paramKey string) string {
     return paramKey
 }
 
-func parseURL(urlString string) url {
-    u := url{}
+func ParseURL(urlString string) Url {
+    u := Url{}
     re := regexp.MustCompile(`^(?P<protocol>[a-z,0-9]+)?(?:://)?(?P<host>[\.,a-z,0-9]+)?(?P<path>[^\?]+)`)
     groupNames := re.SubexpNames()
 	for _, match := range re.FindAllStringSubmatch(urlString, -1) {
@@ -63,19 +63,4 @@ func parseURL(urlString string) url {
     }
 
     return u
-}
-
-func main() {
-    urls := []string{
-        "http://apple.com/search?term=ipad",
-        "https://facebook.com/create/user?firstName=john&lastName=doe&city=venice",
-        "https://geerydev.com/hello?names[]=tyler&names[]=joe&names[]=tradesy",
-        "/hello?names[]=tyler&names[]=joe&company=tradesy",
-    }
-
-    for _, u := range urls {
-        fmt.Println(u)
-        parseURL(u).output()
-        fmt.Println("")
-    }
 }
