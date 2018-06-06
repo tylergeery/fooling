@@ -1,21 +1,18 @@
-package main
+package fib
 
-import "testing"
+import (
+	"math/big"
+	"testing"
+)
 
 func BenchmarkFibTail1000(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		fib_tail(i%200, 1, 0)
+		Fib_tail(i%200, big.NewInt(1), big.NewInt(0))
 	}
 }
 
-// func BenchmarkFibRecursive1000(b *testing.B) {
-// 	for i := 0; i < b.N; i++ {
-// 		fib_recursive(i % 100)
-// 	}
-// }
-
 func BenchmarkFibIter1000(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		fib_iter(i % 200)
+		Fib_iter(i % 200)
 	}
 }
